@@ -16,6 +16,10 @@ export class App {
 	protected readonly title = signal('todo-app-angular20')
 	protected readonly todoService = inject(TodoService)
 
+	todos = this.todoService.filteredTodos
+	stats = this.todoService.stats
+	filter = this.todoService.filter
+
 	deleteTodo(id: string) {
 		this.todoService.addTodo(id)
 	}

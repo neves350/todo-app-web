@@ -10,11 +10,15 @@
     <app-filters />
   </section>
 
-  <section class="mt-4 rounded-2xl border border-zinc-800 bg-gray-900/90 p-3">
+  <section class="mt-4 rounded-2xl border border-zinc-800 bg-gray-900/90 p-4">
+    @if (stats().total === 0) {
+    <p class="text-zinc-400">No todos found...</p>
+    } @else {
     <!-- Stats -->
     <app-stats />
 
     <!-- List -->
     <app-list />
+    }
   </section>
 </main>

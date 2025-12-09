@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { TodoService } from '../../services/todo.service'
 
 @Component({
-  selector: 'app-list',
-  imports: [],
-  templateUrl: './list.html',
-  styleUrl: './list.scss',
+	selector: 'app-list',
+	imports: [FormsModule],
+	templateUrl: './list.html',
+	styleUrl: './list.scss',
 })
 export class List {
+	protected readonly todoService = inject(TodoService)
 
+	todos = this.todoService.filteredTodos
 }

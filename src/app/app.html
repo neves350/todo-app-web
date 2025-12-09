@@ -1,1 +1,83 @@
-<h1>Hello world!</h1>
+<main class="min-h-screen max-w-2xl mx-auto p-6">
+  <div class="mx-auto max-w-2xl space-y-4">
+    <header class="flex items-center gap-3 pb-4">
+      <div class="grid size-10 place-items-center rounded-xl bg-zinc-800">📋</div>
+      <h1 class="text-2xl font-semibold">Todos</h1>
+    </header>
+  </div>
+
+  <section class="mt-4 rounded-2xl border border-zinc-800 bg-zinc-900/50 p-4">
+    <div class="flex gap-2">
+      <input
+        class="flex-1 rounded-lg bg-zinc-900 px-3 py-2 ring-1 ring-zinc-800 focus:outline-none focus:ring-indigo-500"
+        placeholder="Add a new todo"
+        aria-label="New todo"
+      />
+      <button
+        class="rounded-lg bg-indigo-600 px-4 py-2 font-medium hover:bg-indigo-500 disabled:opacity-50"
+      >
+        Add
+      </button>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="flex gap-2 mt-3 mb-3 rounded-xl border border-zinc-800 bg-gray-900/60 p-3">
+    <button class="text-zinc-400 btn btn-primary">All</button>
+    <button class="text-zinc-400 btn">Active</button>
+    <button class="text-zinc-400 btn">Completed</button>
+  </section>
+
+  <section class="mt-4 rounded-2xl border border-zinc-800 bg-gray-900/90 p-3">
+    <!-- Stats -->
+    <div class="mb-3 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-zinc-300">Tasks</h3>
+      <span
+        class="inline-flex items-center gap-1 rounded-full bg-zinc-800 px-3 py-1 text-xs text-zinc-300"
+        >1 active | 1 done | 2 total</span
+      >
+    </div>
+
+    <!-- List -->
+    <ul role="list" class="space-y-2 max-h-80 overflow-auto pr-1">
+      <!-- Active todo -->
+      <li
+        class="group flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-900/80 p-3 hover:border-zinc-700 hover:bg-zinc-900"
+      >
+        <label class="flex flex-1 items-center gap-3">
+          <input type="checkbox" class="size-4 accent-indigo-500" />
+          <input
+            class="flex-1 rounded-md bg-transparent px-2 py-1 ring-1 ring-transparent focus:outline-none focus:ring-zinc-700"
+            value="Buy groceries"
+          />
+        </label>
+
+        <button
+          class="rounded-md border border-zinc-700 px-2 py-1 text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+        >
+          X
+        </button>
+      </li>
+
+      <!-- Completed todos -->
+      <li
+        class="group flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3 opacity-50 hover:opacity-100 hover:bg-zinc-800"
+      >
+        <label class="flex flex-1 items-center gap-3">
+          <input type="checkbox" class="size-4 accent-indigo-500" checked />
+          <input
+            class="flex-1 rounded-md bg-transparent px-2 py-1 ring-1 ring-transparent focus:outline-none focus:ring-zinc-700"
+            value="Finish Angular tutorial"
+            readonly
+          />
+        </label>
+
+        <button
+          class="rounded-md border border-zinc-700 px-2 py-1 text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+        >
+          X
+        </button>
+      </li>
+    </ul>
+  </section>
+</main>

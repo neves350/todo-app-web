@@ -14,7 +14,7 @@ export class List {
 	todos = this.todoService.filteredTodos
 
 	toggleTodo(id: string) {
-		this.todoService.addTodo(id)
+		this.todoService.toggleTodos(id)
 	}
 
 	removeTodo(id: string) {

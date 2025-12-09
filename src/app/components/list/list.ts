@@ -17,6 +17,10 @@ export class List {
 		this.todoService.toggleTodos(id)
 	}
 
+	renameTodo(id: string, title: string) {
+		this.todoService.renameTodo(id, title)
+	}
+
 	removeTodo(id: string) {
 		this.todoService.removeTodo(id)
 	}

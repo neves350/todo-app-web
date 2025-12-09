@@ -62,6 +62,12 @@ export class TodoService {
 		console.log(this.todos())
 	}
 
+	renameTodo(id: string, title: string) {
+		this.todos.update((items) =>
+			items.map((item) => (item.id === id ? { ...item, title } : item)),
+		)
+	}
+
 	removeTodo(id: string) {
 		this.todos.update((items) => items.filter((item) => item.id !== id))
 	}

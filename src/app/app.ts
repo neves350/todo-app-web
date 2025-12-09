@@ -1,9 +1,10 @@
-import { Component, signal } from '@angular/core'
+import { Component, inject, signal } from '@angular/core'
 import { Header } from './components/header/header'
 import { NewTodo } from './components/new-todo/new-todo'
 import { Filters } from './components/filters/filters'
 import { Stats } from './components/stats/stats'
 import { List } from './components/list/list'
+import { TodoService } from './services/todo.service'
 
 @Component({
 	selector: 'app-root',
@@ -13,4 +14,9 @@ import { List } from './components/list/list'
 })
 export class App {
 	protected readonly title = signal('todo-app-angular20')
+	protected readonly todoService = inject(TodoService)
+
+	deleteTodo(id: string) {
+		this.todoService.addTodo(id)
+	}
 }

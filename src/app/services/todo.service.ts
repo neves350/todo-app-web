@@ -1,6 +1,60 @@
-import { Injectable } from '@angular/core'
+import { Compiler, computed, Injectable, signal } from '@angular/core'
+import type { Todo } from '../models/todo.model'
+import type { Filters } from '../models/filters.model'
+
+/**
+ * computed signal
+ * - takes the previus signal and creates a new derived signal from it.
+ * - it's readonly, cannot set it or update it
+ */
 
 @Injectable({
 	providedIn: 'root',
 })
-export class TodoService {}
+export class TodoService {
+	private readonly todos = signal<Todo[]>([])
+	readonly filter = signal<Filters>('all')
+
+	readonly filteredTodos = computed(() => {
+		const f = this.filter()
+		const items = this.todos()
+
+		if (f === 'active') {
+			return items.filter((item) => !item.completed)
+		}
+
+		if (f === 'completed') {
+			return items.filter((item) => item.completed)
+		}
+
+		return items
+	})
+
+	readonly stats = computed(() => {
+		const items = this.todos()
+
+		return {
+			total: items.length,
+			active: items.filter((item) => !item.completed).length,
+			completed: items.filter((item) => item.completed).length,
+		}
+	})
+
+	addTodo(title: string) {
+		this.todos.update((items) => [
+			...items,
+			{
+				id: crypto.randomUUID(),
+				title,
+				completed: false,
+				createdAt: new Date(),
+			},
+		])
+
+		console.log(this.todos())
+	}
+
+	removeTodo(id: string) {
+		this.todos.update((items) => items.filter((item) => item.id !== id))
+	}
+}

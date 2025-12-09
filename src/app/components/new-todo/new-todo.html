@@ -2,10 +2,13 @@
   <input
     class="flex-1 rounded-lg bg-zinc-900 px-3 py-2 ring-1 ring-zinc-800 focus:outline-none focus:ring-indigo-500"
     placeholder="Add a new todo"
+    [(ngModel)]="newTitle"
+    (keyup.enter)="newTodo(newTitle)"
     aria-label="New todo"
   />
   <button
     class="rounded-lg bg-indigo-600 px-4 py-2 font-medium hover:bg-indigo-500 disabled:opacity-50"
+    (click)="newTodo(newTitle)"
   >
     Add
   </button>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
+import { TodoService } from '../../services/todo.service'
 
 @Component({
 	selector: 'app-filters',
@@ -6,4 +7,8 @@ import { Component } from '@angular/core'
 	templateUrl: './filters.html',
 	styleUrl: './filters.scss',
 })
-export class Filters {}
+export class Filters {
+	protected readonly todoService = inject(TodoService)
+
+	filter = this.todoService.filter
+}

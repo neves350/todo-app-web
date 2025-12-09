@@ -18,7 +18,6 @@ export class App {
 
 	todos = this.todoService.filteredTodos
 	stats = this.todoService.stats
-	filter = this.todoService.filter
 
 	deleteTodo(id: string) {
 		this.todoService.addTodo(id)

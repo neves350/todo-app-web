@@ -1,3 +1,21 @@
-<button class="text-zinc-400 btn btn-primary">All</button>
-<button class="text-zinc-400 btn">Active</button>
-<button class="text-zinc-400 btn">Completed</button>
+<button
+  class="text-zinc-400 btn"
+  [class.btn-primary]="filter() === 'all'"
+  (click)="filter.set('all')"
+>
+  All
+</button>
+<button
+  class="text-zinc-400 btn"
+  [class.btn-primary]="filter() === 'active'"
+  (click)="filter.set('active')"
+>
+  Active
+</button>
+<button
+  class="text-zinc-400 btn"
+  [class.btn-primary]="filter() === 'completed'"
+  (click)="filter.set('completed')"
+>
+  Completed
+</button>

@@ -1,6 +1,8 @@
-import { Compiler, computed, Injectable, signal } from '@angular/core'
+import { Compiler, computed, effect, Injectable, signal } from '@angular/core'
 import type { Todo } from '../models/todo.model'
 import type { Filters } from '../models/filters.model'
+
+const TODO_KEY = 'todos'
 
 /**
  * computed signal
@@ -12,7 +14,7 @@ import type { Filters } from '../models/filters.model'
 	providedIn: 'root',
 })
 export class TodoService {
-	private readonly todos = signal<Todo[]>([])
+	private readonly todos = signal<Todo[]>(this.load())
 	readonly filter = signal<Filters>('all')
 
 	readonly filteredTodos = computed(() => {
@@ -40,6 +42,12 @@ export class TodoService {
 		}
 	})
 
+	constructor() {
+		effect(() => {
+			localStorage.setItem(TODO_KEY, JSON.stringify(this.todos()))
+		})
+	}
+
 	addTodo(title: string) {
 		this.todos.update((items) => [
 			...items,
@@ -56,5 +64,23 @@ export class TodoService {
 
 	removeTodo(id: string) {
 		this.todos.update((items) => items.filter((item) => item.id !== id))
+	}
+
+	toggleTodos(id: string) {
+		this.todos.update((items) =>
+			items.map((item) =>
+				item.id === id ? { ...item, completed: !item.completed } : item,
+			),
+		)
+	}
+
+	private load(): Todo[] {
+		try {
+			const raw = localStorage.getItem(TODO_KEY)
+
+			return raw ? (JSON.parse(raw) as Todo[]) : []
+		} catch {
+			return []
+		}
 	}
 }

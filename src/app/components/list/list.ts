@@ -12,4 +12,8 @@ export class List {
 	protected readonly todoService = inject(TodoService)
 
 	todos = this.todoService.filteredTodos
+
+	toggleTodo(id: string) {
+		this.todoService.addTodo(id)
+	}
 }

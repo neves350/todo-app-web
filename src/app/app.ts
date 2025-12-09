@@ -1,11 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal } from '@angular/core'
 
 @Component({
-  selector: 'app-root',
-  imports: [],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+	selector: 'app-root',
+	imports: [],
+	templateUrl: './app.html',
+	styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('todo-app-angular20');
+	protected readonly title = signal('todo-app-angular20')
 }

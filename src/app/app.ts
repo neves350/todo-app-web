@@ -16,7 +16,6 @@ export class App {
 	protected readonly title = signal('todo-app-angular20')
 	protected readonly todoService = inject(TodoService)
 
-	todos = this.todoService.filteredTodos
 	stats = this.todoService.stats
 
 	deleteTodo(id: string) {

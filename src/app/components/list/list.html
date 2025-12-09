@@ -2,6 +2,11 @@
   @for (todo of todos(); track todo.id) {
   <li
     class="group flex items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-900/80 p-3 hover:border-zinc-700 hover:bg-zinc-900"
+    [class.bg-zinc-900/80]="!todo.completed"
+    [class.bg-zinc-900/40]="todo.completed"
+    [class.opacity-70]="todo.completed"
+    [class.hover\:opacity-100]="todo.completed"
+    [class.hover\:bg-zinc-900/60]="todo.completed"
   >
     <label class="flex flex-1 items-center gap-3">
       <input
@@ -12,6 +17,8 @@
       />
       <input
         class="flex-1 rounded-md bg-transparent px-2 py-1 ring-1 ring-transparent focus:outline-none focus:ring-zinc-700"
+        [class.line-through]="todo.completed"
+        [class.text-zinc-400]="todo.completed"
         [value]="todo.title"
         (keyup.enter)="renameTodo(todo.id, $event.target.value)"
       />

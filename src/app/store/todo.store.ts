@@ -105,10 +105,24 @@ export const TodoStore = signalStore(
 				}
 			},
 
-			removeTodo: (id: string) => {
+			removeTodo: async (id: string) => {
+				const todo = store.todos().find((todo) => todo.id === id)
+
+				if (todo) return
+
 				patchState(store, {
 					todos: store.todos().filter((todo) => todo.id !== id),
 				})
+
+				try {
+					await firstValueFrom(todoApi.deleteTodo(id))
+				} catch (error) {
+					patchState(store, {
+						todos: [...store.todos(), todo],
+						error: error instanceof Error ? error.message : 'Unknown error',
+						loading: false,
+					})
+				}
 			},
 
 			renameTodo: (id: string, title: string) => {

@@ -151,8 +151,11 @@ export const TodoStore = signalStore(
 	withHooks((store) => ({
 		onInit: () => {
 			effect(() => {
-				const todos = store.todos()
-				localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+				// const todos = store.todos()
+				// localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+				const _ = store.filter()
+				patchState(store, { error: null })
+				store.fetchTodos() // Load new data
 			})
 		},
 	})),

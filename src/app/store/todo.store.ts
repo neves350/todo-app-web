@@ -79,14 +79,30 @@ export const TodoStore = signalStore(
 					})
 				}
 			},
-			addTodo: (title: string) => {
+			addTodo: async (title: string) => {
+				const todoId = crypto.randomUUID()
 				const todo: Todo = {
-					id: crypto.randomUUID(),
+					id: todoId,
 					title,
 					completed: false,
 					createdAt: new Date(),
 				}
 				patchState(store, { todos: [...store.todos(), todo] }) // Save data
+
+				try {
+					const createdTodo = await firstValueFrom(todoApi.createTodo(title))
+					patchState(store, {
+						todos: store
+							.todos()
+							.map((todo) => (todo.id === createdTodo.id ? createdTodo : todo)),
+					})
+				} catch (error) {
+					patchState(store, {
+						todos: store.todos().filter((todo) => todo.id !== todoId),
+						error: error instanceof Error ? error.message : 'Unknown error',
+						loading: false,
+					})
+				}
 			},
 
 			removeTodo: (id: string) => {

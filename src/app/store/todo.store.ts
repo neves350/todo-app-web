@@ -4,9 +4,25 @@ import {
 	withMethods,
 	patchState,
 	withComputed,
+	withHooks,
 } from '@ngrx/signals'
 import type { Filters } from '../models/filters.model'
 import type { Todo } from '../models/todo.model'
+import { effect } from '@angular/core'
+
+const STORAGE_KEY = 'todos'
+
+function loadFromLocalStorage(): Todo[] {
+	try {
+		const raw = localStorage.getItem(STORAGE_KEY)
+		if (!raw) return []
+
+		const parsed = JSON.parse(raw) as Todo[]
+		return parsed
+	} catch {
+		return []
+	}
+}
 
 export interface TodoState {
 	todos: Todo[]
@@ -14,7 +30,7 @@ export interface TodoState {
 }
 
 export const initialState: TodoState = {
-	todos: [],
+	todos: loadFromLocalStorage(),
 	filter: 'all',
 }
 
@@ -73,6 +89,14 @@ export const todoStore = signalStore(
 					.map((todo) =>
 						todo.id === id ? { ...todo, completed: !todo.completed } : todo,
 					),
+			})
+		},
+	})),
+	withHooks((store) => ({
+		onInit: () => {
+			effect(() => {
+				const todos = store.todos()
+				localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
 			})
 		},
 	})),

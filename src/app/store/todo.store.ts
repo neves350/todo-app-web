@@ -1,4 +1,10 @@
-import { withState, signalStore, withMethods, patchState } from '@ngrx/signals'
+import {
+	withState,
+	signalStore,
+	withMethods,
+	patchState,
+	withComputed,
+} from '@ngrx/signals'
 import type { Filters } from '../models/filters.model'
 import type { Todo } from '../models/todo.model'
 
@@ -14,6 +20,27 @@ export const initialState: TodoState = {
 
 export const todoStore = signalStore(
 	withState(initialState),
+	withComputed((store) => ({
+		filteredTodos: () => {
+			const f = store.filter()
+			const items = store.todos()
+
+			if (f === 'active') return items.filter((item) => !item.completed)
+			if (f === 'completed') return items.filter((item) => item.completed)
+
+			return items
+		},
+
+		stats: () => {
+			const items = store.todos()
+
+			return {
+				total: items.length,
+				active: items.filter((item) => !item.completed).length,
+				completed: items.filter((item) => item.completed).length,
+			}
+		},
+	})),
 	withMethods((store) => ({
 		addTodo: (title: string) => {
 			const todo: Todo = {

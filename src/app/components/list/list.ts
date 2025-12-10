@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TodoService } from '../../services/todo.service'
+import { TodoStore } from '../../store/todo.store'
 
 @Component({
 	selector: 'app-list',
@@ -9,19 +10,19 @@ import { TodoService } from '../../services/todo.service'
 	styleUrl: './list.scss',
 })
 export class List {
-	protected readonly todoService = inject(TodoService)
+	private readonly todoStore = inject(TodoStore)
 
-	todos = this.todoService.filteredTodos
+	todos = this.todoStore.filteredTodos
 
 	toggleTodo(id: string) {
-		this.todoService.toggleTodos(id)
+		this.todoStore.toggleTodos(id)
 	}
 
 	renameTodo(id: string, title: string) {
-		this.todoService.renameTodo(id, title)
+		this.todoStore.renameTodo(id, title)
 	}
 
 	removeTodo(id: string) {
-		this.todoService.removeTodo(id)
+		this.todoStore.removeTodo(id)
 	}
 }

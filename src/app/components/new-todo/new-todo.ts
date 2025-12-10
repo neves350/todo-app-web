@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core'
-import { TodoService } from '../../services/todo.service'
 import { FormsModule } from '@angular/forms'
+import { TodoStore } from '../../store/todo.store'
 
 @Component({
 	selector: 'app-new-todo',
@@ -9,11 +9,11 @@ import { FormsModule } from '@angular/forms'
 	styleUrl: './new-todo.scss',
 })
 export class NewTodo {
-	protected readonly todoService = inject(TodoService)
+	protected readonly todoStore = inject(TodoStore)
 
 	newTitle = ''
 
 	newTodo(title: string) {
-		this.todoService.addTodo(title)
+		this.todoStore.addTodo(title)
 	}
 }

@@ -1,6 +1,6 @@
-import { Compiler, computed, effect, Injectable, signal } from '@angular/core'
+import { computed, effect, Injectable, signal } from '@angular/core'
 import type { Todo } from '../models/todo.model'
-import type { Filters } from '../models/filters.model'
+import type { Filter } from '../models/filters.model'
 
 const TODO_KEY = 'todos'
 
@@ -15,7 +15,7 @@ const TODO_KEY = 'todos'
 })
 export class TodoService {
 	private readonly todos = signal<Todo[]>(this.load())
-	readonly filter = signal<Filters>('all')
+	readonly filter = signal<Filter>('all')
 
 	readonly filteredTodos = computed(() => {
 		const f = this.filter()

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core'
-import { TodoService } from '../../services/todo.service'
+import { TodoStore } from '../../store/todo.store'
+import type { Filter } from '../../models/filters.model'
 
 @Component({
 	selector: 'app-filters',
@@ -8,7 +9,10 @@ import { TodoService } from '../../services/todo.service'
 	styleUrl: './filters.scss',
 })
 export class Filters {
-	protected readonly todoService = inject(TodoService)
+	private readonly todoStore = inject(TodoStore)
+	protected readonly filter = this.todoStore.filter
 
-	filter = this.todoService.filter
+	setFilter(filter: Filter) {
+		this.todoStore.setFilter(filter)
+	}
 }

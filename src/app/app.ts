@@ -5,20 +5,18 @@ import { Filters } from './components/filters/filters'
 import { Stats } from './components/stats/stats'
 import { List } from './components/list/list'
 import { TodoService } from './services/todo.service'
+import { TodoStore } from './store/todo.store'
 
 @Component({
 	selector: 'app-root',
 	imports: [Header, NewTodo, Filters, Stats, List],
 	templateUrl: './app.html',
 	styleUrl: './app.scss',
+	providers: [TodoStore],
 })
 export class App {
 	protected readonly title = signal('todo-app-angular20')
 	protected readonly todoService = inject(TodoService)
 
 	stats = this.todoService.stats
-
-	deleteTodo(id: string) {
-		this.todoService.addTodo(id)
-	}
 }

@@ -6,7 +6,7 @@ import {
 	withComputed,
 	withHooks,
 } from '@ngrx/signals'
-import type { Filters } from '../models/filters.model'
+import type { Filter } from '../models/filters.model'
 import type { Todo } from '../models/todo.model'
 import { effect } from '@angular/core'
 
@@ -26,7 +26,7 @@ function loadFromLocalStorage(): Todo[] {
 
 export interface TodoState {
 	todos: Todo[]
-	filter: Filters
+	filter: Filter
 }
 
 export const initialState: TodoState = {
@@ -34,7 +34,7 @@ export const initialState: TodoState = {
 	filter: 'all',
 }
 
-export const todoStore = signalStore(
+export const TodoStore = signalStore(
 	withState(initialState),
 	withComputed((store) => ({
 		filteredTodos: () => {
@@ -82,7 +82,7 @@ export const todoStore = signalStore(
 			})
 		},
 
-		toggleTodo: (id: string) => {
+		toggleTodos: (id: string) => {
 			patchState(store, {
 				todos: store
 					.todos()
@@ -90,6 +90,10 @@ export const todoStore = signalStore(
 						todo.id === id ? { ...todo, completed: !todo.completed } : todo,
 					),
 			})
+		},
+
+		setFilter: (filter: Filter) => {
+			patchState(store, { filter })
 		},
 	})),
 	withHooks((store) => ({

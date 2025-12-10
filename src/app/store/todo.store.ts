@@ -8,7 +8,9 @@ import {
 } from '@ngrx/signals'
 import type { Filter } from '../models/filters.model'
 import type { Todo } from '../models/todo.model'
-import { effect } from '@angular/core'
+import { effect, inject } from '@angular/core'
+import { TodoApiService } from '../services/data/todo-api.service'
+import { firstValueFrom } from 'rxjs'
 
 const STORAGE_KEY = 'todos'
 
@@ -27,6 +29,8 @@ function loadFromLocalStorage(): Todo[] {
 export interface TodoState {
 	todos: Todo[]
 	filter: Filter
+	loading: boolean
+	error: null
 }
 
 export const initialState: TodoState = {
@@ -57,45 +61,63 @@ export const TodoStore = signalStore(
 			}
 		},
 	})),
-	withMethods((store) => ({
-		addTodo: (title: string) => {
-			const todo: Todo = {
-				id: crypto.randomUUID(),
-				title,
-				completed: false,
-				createdAt: new Date(),
-			}
-			patchState(store, { todos: [...store.todos(), todo] }) // Save data
-		},
+	withMethods((store) => {
+		const todoApi = inject(TodoApiService)
 
-		removeTodo: (id: string) => {
-			patchState(store, {
-				todos: store.todos().filter((todo) => todo.id !== id),
-			})
-		},
+		return {
+			fetchTodos: async () => {
+				patchState(store, { loading: true, error: null })
 
-		renameTodo: (id: string, title: string) => {
-			patchState(store, {
-				todos: store
-					.todos()
-					.map((todo) => (todo.id === id ? { ...todo, title } : todo)),
-			})
-		},
+				try {
+					const filter = store.filter()
+					const todos = await firstValueFrom(todoApi.listTodos(filter))
+					patchState(store, { todos: todos.data, loading: false })
+				} catch (error) {
+					patchState(store, {
+						error: error instanceof Error ? error.message : 'Unknown error',
+						loading: false,
+					})
+				}
+			},
+			addTodo: (title: string) => {
+				const todo: Todo = {
+					id: crypto.randomUUID(),
+					title,
+					completed: false,
+					createdAt: new Date(),
+				}
+				patchState(store, { todos: [...store.todos(), todo] }) // Save data
+			},
 
-		toggleTodos: (id: string) => {
-			patchState(store, {
-				todos: store
-					.todos()
-					.map((todo) =>
-						todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-					),
-			})
-		},
+			removeTodo: (id: string) => {
+				patchState(store, {
+					todos: store.todos().filter((todo) => todo.id !== id),
+				})
+			},
 
-		setFilter: (filter: Filter) => {
-			patchState(store, { filter })
-		},
-	})),
+			renameTodo: (id: string, title: string) => {
+				patchState(store, {
+					todos: store
+						.todos()
+						.map((todo) => (todo.id === id ? { ...todo, title } : todo)),
+				})
+			},
+
+			toggleTodos: (id: string) => {
+				patchState(store, {
+					todos: store
+						.todos()
+						.map((todo) =>
+							todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+						),
+				})
+			},
+
+			setFilter: (filter: Filter) => {
+				patchState(store, { filter })
+			},
+		}
+	}),
 	withHooks((store) => ({
 		onInit: () => {
 			effect(() => {

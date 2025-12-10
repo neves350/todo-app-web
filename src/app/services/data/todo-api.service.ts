@@ -5,6 +5,11 @@ import type { Observable } from 'rxjs'
 import type { Todo } from '../../models/todo.model'
 import { environment } from '../../../environments/environment'
 
+export interface TodoResponse {
+	data: Todo[]
+	total: number
+}
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -12,10 +17,10 @@ export class TodoApiService {
 	private readonly http = inject(HttpClient)
 	private readonly baseUrl = '/todos'
 
-	listTodos(filter: Filter = 'all'): Observable<Todo[]> {
+	listTodos(filter: Filter = 'all'): Observable<TodoResponse> {
 		const url = `${environment.apiUrl}${this.baseUrl}?filter=${filter}`
 
-		return this.http.get<Todo[]>(url)
+		return this.http.get<TodoResponse>(url)
 	}
 
 	createTodo(title: string): Observable<Todo> {

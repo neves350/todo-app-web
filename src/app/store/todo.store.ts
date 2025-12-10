@@ -30,12 +30,14 @@ export interface TodoState {
 	todos: Todo[]
 	filter: Filter
 	loading: boolean
-	error: null
+	error: string | null
 }
 
 export const initialState: TodoState = {
 	todos: loadFromLocalStorage(),
 	filter: 'all',
+	loading: false,
+	error: null,
 }
 
 export const TodoStore = signalStore(
@@ -94,7 +96,7 @@ export const TodoStore = signalStore(
 					patchState(store, {
 						todos: store
 							.todos()
-							.map((todo) => (todo.id === createdTodo.id ? createdTodo : todo)),
+							.map((todo) => (todo.id === todoId ? createdTodo : todo)),
 					})
 				} catch (error) {
 					patchState(store, {

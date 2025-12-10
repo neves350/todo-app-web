@@ -1,6 +1,6 @@
 import { computed, effect, Injectable, signal } from '@angular/core'
-import type { Todo } from '../models/todo.model'
-import type { Filter } from '../models/filters.model'
+import type { Filter } from '../../models/filters.model'
+import type { Todo } from '../../models/todo.model'
 
 const TODO_KEY = 'todos'
 

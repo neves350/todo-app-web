@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { TodoService } from '../../services/todo.service'
 import { TodoStore } from '../../store/todo.store'
 
 @Component({

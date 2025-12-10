@@ -12,19 +12,7 @@ import { effect, inject } from '@angular/core'
 import { TodoApiService } from '../services/data/todo-api.service'
 import { firstValueFrom } from 'rxjs'
 
-const STORAGE_KEY = 'todos'
-
-function loadFromLocalStorage(): Todo[] {
-	try {
-		const raw = localStorage.getItem(STORAGE_KEY)
-		if (!raw) return []
-
-		const parsed = JSON.parse(raw) as Todo[]
-		return parsed
-	} catch {
-		return []
-	}
-}
+const STORAGE_KEY = 'todos_v1'
 
 export interface TodoState {
 	todos: Todo[]
@@ -34,7 +22,7 @@ export interface TodoState {
 }
 
 export const initialState: TodoState = {
-	todos: loadFromLocalStorage(),
+	todos: [],
 	filter: 'all',
 	loading: false,
 	error: null,
@@ -110,7 +98,7 @@ export const TodoStore = signalStore(
 			removeTodo: async (id: string) => {
 				const todo = store.todos().find((todo) => todo.id === id)
 
-				if (todo) return
+				if (!todo) return
 
 				patchState(store, {
 					todos: store.todos().filter((todo) => todo.id !== id),

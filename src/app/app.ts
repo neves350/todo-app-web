@@ -4,8 +4,8 @@ import { NewTodo } from './components/new-todo/new-todo'
 import { Filters } from './components/filters/filters'
 import { Stats } from './components/stats/stats'
 import { List } from './components/list/list'
-import { TodoService } from './services/todo.service'
 import { TodoStore } from './store/todo.store'
+import { TodoService } from './services/todo/todo.service'
 
 @Component({
 	selector: 'app-root',

@@ -1,6 +1,6 @@
 # Todo App - Angular 20
 
-A modern, reactive todo application built with Angular 20, showcasing the power of signals, computed values, and effects for state management.
+A modern, reactive todo application built with Angular 20, showcasing NgRx Signals for state management with signalStore, computed values, and effects.
 
 ## 🚀 Tech Stack
 
@@ -15,13 +15,13 @@ A modern, reactive todo application built with Angular 20, showcasing the power 
 - **PostCSS** `^8.5.6` - CSS processing
 
 ### State Management
-- **Angular Signals** - Reactive state management
+- **NgRx Signals** `^20.1.0` - Signal-based state management with signalStore
+- **Angular Signals** - Reactive primitives
 - **LocalStorage** - Client-side persistence
 
 ### Development Tools
-- **Biome** `2.3.8` - Fast formatter and linter
 - **Angular CLI** `^20.2.2` - Development tooling
-- **Karma** `~6.4.0` - Test runner
+- **Karma** `~6.4.0` - Test runner with Chrome launcher
 - **Jasmine** `~5.9.0` - Testing framework
 
 ## ✨ Features
@@ -31,7 +31,7 @@ A modern, reactive todo application built with Angular 20, showcasing the power 
 - 🔍 Filter todos by status (all, active, completed)
 - 📊 Real-time statistics (total, active, completed)
 - 💾 Automatic localStorage persistence
-- ⚡ Reactive updates using Angular signals
+- ⚡ Reactive updates using NgRx Signals and Angular signals
 
 ## 📁 Project Structure
 
@@ -48,8 +48,10 @@ src/
 │   │   ├── todo.model.ts    # Todo interface
 │   │   ├── filters.model.ts # Filter type definition
 │   │   └── stats.model.ts   # Statistics interface
+│   ├── store/
+│   │   └── todo.store.ts    # NgRx Signals store for state management
 │   ├── services/
-│   │   └── todo.service.ts  # Core business logic and state management
+│   │   └── todo.service.ts  # Legacy service (if still in use)
 │   ├── app.ts              # Root component
 │   └── app.config.ts       # Application configuration
 └── main.ts                 # Application entry point
@@ -65,16 +67,16 @@ graph TD
     B -->|Filter Todos| D[Filters Component]
     B -->|Toggle/Edit/Delete| E[List Component]
     
-    C --> F[TodoService.addTodo]
-    D --> G[TodoService.filter.set]
+    C --> F[TodoStore.addTodo]
+    D --> G[TodoStore.setFilter]
     E --> H{Todo Action}
     
-    H -->|Toggle| I[TodoService.toggleTodos]
-    H -->|Edit| J[TodoService.renameTodo]
-    H -->|Delete| K[TodoService.removeTodo]
+    H -->|Toggle| I[TodoStore.toggleTodos]
+    H -->|Edit| J[TodoStore.renameTodo]
+    H -->|Delete| K[TodoStore.removeTodo]
     
-    F --> L[(todos signal)]
-    G --> M[(filter signal)]
+    F --> L[(TodoStore: todos)]
+    G --> M[(TodoStore: filter)]
     I --> L
     J --> L
     K --> L
@@ -90,7 +92,7 @@ graph TD
     Q --> R[(LocalStorage)]
     
     R --> S[App Initialization]
-    S --> T[TodoService.load]
+    S --> T[TodoStore: loadFromLocalStorage]
     T --> L
     
     style L fill:#e1f5ff
@@ -104,14 +106,14 @@ graph TD
 ### Flow Explanation
 
 1. **User Actions**: Users interact with components (NewTodo, Filters, List)
-2. **Service Methods**: Components call TodoService methods to update state
-3. **Signal Updates**: Service methods update the `todos` or `filter` signals
+2. **Store Methods**: Components call TodoStore methods to update state
+3. **Signal Updates**: Store methods use `patchState` to update the `todos` or `filter` state
 4. **Computed Values**: 
    - `filteredTodos` automatically recomputes based on `todos` and `filter`
    - `stats` automatically recomputes based on `todos`
 5. **Reactive Updates**: Components receive updated computed values and re-render
-6. **Persistence**: An `effect` watches `todos` and saves to localStorage automatically
-7. **Initialization**: On app load, todos are loaded from localStorage
+6. **Persistence**: An `effect` in `withHooks` watches `todos` and saves to localStorage automatically
+7. **Initialization**: On app load, todos are loaded from localStorage via `loadFromLocalStorage()`
 
 ## 🛠️ Getting Started
 
@@ -140,34 +142,41 @@ npm start
 
 4. Open your browser and navigate to `http://localhost:4200`
 
-### Build for Production
+## 📜 Available Scripts
 
-```bash
-npm run build
-```
-
-### Run Tests
-
-```bash
-npm test
-```
+- `npm start` - Start the development server on `http://localhost:4200`
+- `npm run build` - Build the application for production
+- `npm run watch` - Build and watch for changes in development mode
+- `npm test` - Run unit tests with Karma and Jasmine
+- `ng <command>` - Access Angular CLI directly
 
 ## 🏗️ Architecture Highlights
 
-### Signals-Based State Management
-- Uses Angular signals for reactive state
-- `computed()` signals derive filtered todos and statistics
-- `effect()` automatically persists todos to localStorage
+### NgRx Signals State Management
+- Uses NgRx Signals `signalStore` for centralized state management
+- `withState()` defines the initial state
+- `withComputed()` creates derived signals for filtered todos and statistics
+- `withMethods()` provides state mutation methods using `patchState()`
+- `withHooks()` uses `effect()` to automatically persist todos to localStorage
+- Reactive updates propagate automatically through the component tree
+
+### Modern Angular Features
+- **Standalone Components** - No NgModules, explicit imports
+- **Control Flow Syntax** - Modern `@if/@else` syntax instead of `*ngIf`
+- **Signal APIs** - Reactive state with signals, computed, and effects
+- **Dependency Injection** - Modern `inject()` function
 
 ### Component Architecture
 - Standalone components with explicit imports
 - Service injection using `inject()` function
 - Type-safe models and interfaces
+- Separation of concerns: components for UI, services for business logic
 
 ### Data Persistence
-- Automatic synchronization with localStorage
-- Data restored on application initialization
+- Automatic synchronization with localStorage via `withHooks` effect
+- Data restored on application initialization through `loadFromLocalStorage()`
 - No manual save/load operations needed
+- Effect-based reactive persistence
 
 ## 📝 License
 

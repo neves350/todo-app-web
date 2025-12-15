@@ -42,7 +42,8 @@ export const TodoStore = signalStore(
 		},
 
 		stats: () => {
-			const items = store.todos()
+			// Normalize to an array in case backend returns null/undefined
+			const items = store.todos() ?? []
 
 			return {
 				total: items.length,
@@ -61,7 +62,7 @@ export const TodoStore = signalStore(
 				try {
 					const filter = store.filter()
 					const todos = await firstValueFrom(todoApi.listTodos(filter))
-					patchState(store, { todos: todos.data, loading: false })
+					patchState(store, { todos: todos.data ?? [], loading: false })
 				} catch (error) {
 					patchState(store, {
 						error: error instanceof Error ? error.message : 'Unknown error',

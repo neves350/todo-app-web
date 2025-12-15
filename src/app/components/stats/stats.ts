@@ -9,6 +9,5 @@ import { TodoStore } from '../../store/todo.store'
 })
 export class Stats {
 	private readonly todoStore = inject(TodoStore)
-
-	stats = this.todoStore.stats
+	readonly stats = this.todoStore.stats
 }

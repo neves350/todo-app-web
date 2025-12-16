@@ -116,22 +116,75 @@ export const TodoStore = signalStore(
 				}
 			},
 
-			renameTodo: (id: string, title: string) => {
+			renameTodo: async (id: string, title: string) => {
+				const todo = store.todos().find((todo) => todo.id === id)
+
+				if (!todo || todo.title === title) return
+
+				const originalTitle = todo.title
+
 				patchState(store, {
 					todos: store
 						.todos()
 						.map((todo) => (todo.id === id ? { ...todo, title } : todo)),
 				})
+
+				try {
+					const updatedTodo = await firstValueFrom(
+						todoApi.updateTodo(id, { title }),
+					)
+					patchState(store, {
+						todos: store
+							.todos()
+							.map((todo) => (todo.id === id ? updatedTodo : todo)),
+					})
+				} catch (error) {
+					// Revert to original title on error
+					patchState(store, {
+						todos: store
+							.todos()
+							.map((todo) =>
+								todo.id === id ? { ...todo, title: originalTitle } : todo,
+							),
+						error: error instanceof Error ? error.message : 'Unknown error',
+					})
+				}
 			},
 
-			toggleTodos: (id: string) => {
+			toggleTodos: async (id: string) => {
+				const todo = store.todos().find((todo) => todo.id === id)
+
+				if (!todo) return
+
+				const newCompleted = !todo.completed
+
 				patchState(store, {
 					todos: store
 						.todos()
 						.map((todo) =>
-							todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+							todo.id === id ? { ...todo, completed: newCompleted } : todo,
 						),
 				})
+
+				try {
+					const updatedTodo = await firstValueFrom(
+						todoApi.updateTodo(id, { completed: newCompleted }),
+					)
+					patchState(store, {
+						todos: store
+							.todos()
+							.map((todo) => (todo.id === id ? updatedTodo : todo)),
+					})
+				} catch (error) {
+					patchState(store, {
+						todos: store
+							.todos()
+							.map((todo) =>
+								todo.id === id ? { ...todo, completed: !newCompleted } : todo,
+							),
+						error: error instanceof Error ? error.message : 'Unknown error',
+					})
+				}
 			},
 
 			setFilter: (filter: Filter) => {

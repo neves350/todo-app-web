@@ -13,14 +13,15 @@
         type="checkbox"
         class="size-4 accent-indigo-500"
         [checked]="todo.completed"
-        (click)="toggleTodo(todo.id)"
+        (change)="toggleTodo(todo.id)"
       />
       <input
+        #titleInput
         class="flex-1 rounded-md bg-transparent px-2 py-1 ring-1 ring-transparent focus:outline-none focus:ring-zinc-700"
         [class.line-through]="todo.completed"
         [class.text-zinc-400]="todo.completed"
         [value]="todo.title"
-        (keyup.enter)="renameTodo(todo.id, $event.target.value)"
+        (keyup.enter)="renameTodo(todo.id, titleInput.value)"
       />
     </label>
 

@@ -1,15 +1,19 @@
 import { Component, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TodoStore } from '../../store/todo.store'
+import { LucideAngularModule, Trash, SquarePen } from 'lucide-angular'
 
 @Component({
 	selector: 'app-list',
-	imports: [FormsModule],
+	imports: [FormsModule, LucideAngularModule],
 	templateUrl: './list.html',
 	styleUrl: './list.scss',
 })
 export class List {
 	private readonly todoStore = inject(TodoStore)
+
+	readonly TrashIcon = Trash
+	readonly SquarePenIcon = SquarePen
 
 	todos = this.todoStore.filteredTodos
 

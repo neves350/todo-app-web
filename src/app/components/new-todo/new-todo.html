@@ -1,15 +1,16 @@
 <div class="flex gap-2">
   <input
-    class="flex-1 rounded-lg bg-zinc-900 px-3 py-2 ring-1 ring-zinc-800 focus:outline-none focus:ring-indigo-500"
-    placeholder="Add a new todo"
+    class="flex-1 rounded-lg bg-zinc-900 px-4 py-3 ring-1 ring-zinc-800 focus:outline-none focus:ring-indigo-500"
+    placeholder="Add your task"
     [(ngModel)]="newTitle"
     (keyup.enter)="newTodo(newTitle)"
     aria-label="New todo"
   />
   <button
-    class="rounded-lg bg-indigo-600 px-4 py-2 font-medium hover:bg-indigo-500 disabled:opacity-50"
+    class="rounded-lg bg-sky-800 px-4 py-3 font-medium hover:bg-indigo-500 disabled:opacity-50 inline-flex gap-2"
     (click)="newTodo(newTitle)"
   >
     Add
+    <lucide-angular [img]="FilePlusIcon" class="w-4" />
   </button>
 </div>

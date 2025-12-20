@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TodoStore } from '../../store/todo.store'
 import { LucideAngularModule, FilePlus } from 'lucide-angular'
+import { toast } from 'ngx-sonner'
 
 @Component({
 	selector: 'app-new-todo',
@@ -18,5 +19,10 @@ export class NewTodo {
 
 	newTodo(title: string) {
 		this.todoStore.addTodo(title)
+		this.newTitle = ''
+
+		toast.info('Task created', {
+			description: 'Your task has been successfully created.',
+		})
 	}
 }

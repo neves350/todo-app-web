@@ -6,10 +6,11 @@ import { Stats } from './components/stats/stats'
 import { List } from './components/list/list'
 import { TodoStore } from './store/todo.store'
 import { TodoService } from './services/todo/todo.service'
+import { NgxSonnerToaster } from 'ngx-sonner'
 
 @Component({
 	selector: 'app-root',
-	imports: [Header, NewTodo, Filters, Stats, List],
+	imports: [Header, NewTodo, Filters, Stats, List, NgxSonnerToaster],
 	templateUrl: './app.html',
 	styleUrl: './app.scss',
 	providers: [TodoStore],

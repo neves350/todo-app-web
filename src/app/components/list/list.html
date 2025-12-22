@@ -51,5 +51,12 @@
       <lucide-angular [img]="TrashIcon" class="w-4" />
     </button>
   </li>
+  } @if (todos().length === 0) {
+
+  <h3
+    class="text-md font-semibold text-zinc-500 text-center border-2 border-dashed p-2 rounded-md border-sky-800"
+  >
+    No todos
+  </h3>
   }
 </ul>
